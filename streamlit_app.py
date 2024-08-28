@@ -4,19 +4,69 @@ from gradio_client import Client, handle_file
 # Initiera Gradio-klienten med ditt önskade endpoint
 client = Client("Kwai-Kolors/Kolors-Virtual-Try-On")
 
-# Streamlit app inställningar
-st.title("Virtuell Try-on!")
+# Övergripande stil för appen
+st.markdown("""
+    <style>
+    .main {
+        background-color: #f5f5f5;
+        padding: 2rem;
+    }
+    .stButton>button {
+        background-color: #000000;
+        color: white;
+        border-radius: 5px;
+        width: 100%;
+    }
+    .stButton>button:hover {
+        background-color: #333333;
+    }
+    .header-text {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #333333;
+    }
+    .subheader-text {
+        font-size: 1.2rem;
+        color: #666666;
+        margin-bottom: 1.5rem;
+    }
+    .divider {
+        margin: 2rem 0;
+        height: 1px;
+        background-color: #ddd;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-# Bilduppladdning för person och plagg
-person_img = st.file_uploader("Ladda upp Personbild", type=["png", "jpg", "jpeg"])
-garment_img = st.file_uploader("Ladda upp Plaggbild", type=["png", "jpg", "jpeg"])
+# Layout likt en modern e-handelswebbplats
+st.markdown('<div class="header-text">Virtuell Try-on!</div>', unsafe_allow_html=True)
+st.markdown('<div class="subheader-text">Ladda upp en bild på en person och ett plagg för att prova plagget virtuellt.</div>', unsafe_allow_html=True)
 
-# Slider för seed-värde och checkbox för att slumpa seed
-seed = st.slider("Välj Seed-värde", 0, 100, 0)
-randomize_seed = st.checkbox("Slumpa Seed", value=True)
+# Avgränsare för att separera olika delar av appen
+st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 
-# När användaren klickar på knappen "Utför"
-if st.button("Utför Virtuell Tryon"):
+# Använd kolumner för uppladdning av bilder, likt en e-handelsproduktlista
+col1, col2 = st.columns(2)
+
+with col1:
+    st.subheader("Personbild")
+    person_img = st.file_uploader("Ladda upp Personbild", type=["png", "jpg", "jpeg"], key="person")
+
+    if person_img is not None:
+        st.image(person_img, caption="Förhandsvisning av Personbild", use_column_width=True)
+
+with col2:
+    st.subheader("Plaggbild")
+    garment_img = st.file_uploader("Ladda upp Plaggbild", type=["png", "jpg", "jpeg"], key="garment")
+
+    if garment_img is not None:
+        st.image(garment_img, caption="Förhandsvisning av Plaggbild", use_column_width=True)
+
+# Avgränsare före knappen
+st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+
+# Utföra Virtuell Try-on
+if st.button("Utför Virtuell Try-on"):
     if person_img is not None and garment_img is not None:
         # Spara uppladdade filer till tillfälliga filer
         with open("person_img.png", "wb") as f:
@@ -29,8 +79,8 @@ if st.button("Utför Virtuell Tryon"):
         result = client.predict(
             person_img=handle_file("person_img.png"),
             garment_img=handle_file("garment_img.png"),
-            seed=seed,
-            randomize_seed=randomize_seed,
+            seed=0,  # Seed är inte viktigt här eftersom vi randomiserar
+            randomize_seed=True,  # Alltid randomisera seed
             api_name="/tryon"
         )
         
