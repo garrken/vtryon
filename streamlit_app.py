@@ -15,12 +15,12 @@ st.markdown("""
     .stButton>button {
         background-color: #000000;
         color: white;
-        border-radius: 25px;
         padding: 10px 20px;
         font-size: 1rem;
         width: 50%;
         display: block;
         margin: 20px auto;
+        border-radius: 0px;  /* Gör knappen rektangulär */
     }
     .stButton>button:hover {
         background-color: #333333;
@@ -64,13 +64,6 @@ st.markdown("""
         border: 1px solid #ddd;
         border-radius: 10px;
     }
-    .logo {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .logo img {
-        max-width: 200px;
-    }
     @media (max-width: 768px) {
         .stApp {
             padding: 1rem;
@@ -90,9 +83,6 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
-
-# Lägg till logotyp högst upp - Justera logotypens URL till en pålitlig källa eller ladda upp själv
-st.markdown('<div class="logo"><img src="https://www.ginatricot.com/assets/logos/ginatricot-logo.svg" alt="Gina Tricot Logo" class="image-preview"></div>', unsafe_allow_html=True)
 
 # Layout likt en modern e-handelswebbplats
 st.markdown('<div class="header-text">Virtuell Try-on!</div>', unsafe_allow_html=True)
