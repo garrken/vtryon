@@ -4,33 +4,38 @@ from gradio_client import Client, handle_file
 # Initiera Gradio-klienten med ditt önskade endpoint
 client = Client("Kwai-Kolors/Kolors-Virtual-Try-On")
 
-# Övergripande stil för appen
+# Övergripande stil för appen, inklusive bakgrundsfärg, typografi, och logotyp
 st.markdown("""
     <style>
     .main {
-        background-color: #f5f5f5;
+        background-color: #ffffff;
+        font-family: 'Helvetica Neue', sans-serif;
         padding: 2rem;
     }
     .stButton>button {
         background-color: #000000;
         color: white;
-        border-radius: 5px;
-        width: 100%;
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-size: 1rem;
     }
     .stButton>button:hover {
         background-color: #333333;
+        color: #ffffff;
     }
     .header-text {
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: bold;
         color: #333333;
         text-align: center;
+        margin-top: 10px;
+        margin-bottom: 5px;
     }
     .subheader-text {
-        font-size: 1.2rem;
+        font-size: 1rem;
         color: #666666;
         text-align: center;
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
     }
     .divider {
         margin: 2rem 0;
@@ -41,11 +46,40 @@ st.markdown("""
         display: flex;
         align-items: center;
         gap: 10px;
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         font-weight: bold;
+        color: #333333;
+        margin-bottom: 1rem;
+    }
+    .logo {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .logo img {
+        max-width: 200px;
+    }
+    @media (max-width: 768px) {
+        .stApp {
+            padding: 1rem;
+        }
+        .header-text {
+            font-size: 2rem;
+        }
+        .subheader-text {
+            font-size: 0.9rem;
+        }
+        .stButton>button {
+            width: auto;
+        }
+        .icon-header {
+            justify-content: center;
+        }
     }
     </style>
     """, unsafe_allow_html=True)
+
+# Lägg till logotyp högst upp
+st.markdown('<div class="logo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Gina_Tricot_logo.svg/2560px-Gina_Tricot_logo.svg.png" alt="Gina Tricot Logo"></div>', unsafe_allow_html=True)
 
 # Layout likt en modern e-handelswebbplats
 st.markdown('<div class="header-text">Virtuell Try-on!</div>', unsafe_allow_html=True)
@@ -54,7 +88,7 @@ st.markdown('<div class="subheader-text">Ladda upp en bild på en person och ett
 # Avgränsare för att separera olika delar av appen
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 
-# Använd kolumner för uppladdning av bilder, likt en e-handelsproduktlista
+# Använd kolumner för uppladdning av bilder, med dynamisk anpassning för mobil
 col1, col2 = st.columns(2)
 
 with col1:
@@ -95,7 +129,7 @@ if st.button("Utför Virtuell Try-on"):
             )
         
         # Visa resultatet i Streamlit-appen
-        st.image(result[0], caption="Resultatbild")
+        st.image(result[0], caption="Resultatbild", use_column_width=True)
         st.write(f"Använt seed: {result[1]}")
         st.write(f"Svar: {result[2]}")
     else:
