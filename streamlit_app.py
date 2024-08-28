@@ -18,6 +18,9 @@ st.markdown("""
         border-radius: 25px;
         padding: 10px 20px;
         font-size: 1rem;
+        width: 50%;
+        display: block;
+        margin: 20px auto;
     }
     .stButton>button:hover {
         background-color: #333333;
@@ -58,6 +61,22 @@ st.markdown("""
     .logo img {
         max-width: 200px;
     }
+    .image-preview {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        width: 200px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+    .image-preview img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
     @media (max-width: 768px) {
         .stApp {
             padding: 1rem;
@@ -96,14 +115,14 @@ with col1:
     person_img = st.file_uploader("Ladda upp Personbild", type=["png", "jpg", "jpeg"], key="person")
 
     if person_img is not None:
-        st.image(person_img, caption="Förhandsvisning av Personbild", use_column_width=True)
+        st.markdown('<div class="image-preview"><img src="data:image/png;base64,{}"></div>'.format(person_img.getbuffer().hex()), unsafe_allow_html=True)
 
 with col2:
     st.markdown('<div class="icon-header">👗 Plaggbild</div>', unsafe_allow_html=True)
     garment_img = st.file_uploader("Ladda upp Plaggbild", type=["png", "jpg", "jpeg"], key="garment")
 
     if garment_img is not None:
-        st.image(garment_img, caption="Förhandsvisning av Plaggbild", use_column_width=True)
+        st.markdown('<div class="image-preview"><img src="data:image/png;base64,{}"></div>'.format(garment_img.getbuffer().hex()), unsafe_allow_html=True)
 
 # Avgränsare före knappen
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
