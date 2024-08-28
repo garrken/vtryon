@@ -1,5 +1,3 @@
-pip install streamlit gradio_client
-
 import streamlit as st
 from gradio_client import Client, handle_file
 

@@ -1,1 +1,2 @@
-pip install streamlit gradio_client
+streamlit
+gradio_client
