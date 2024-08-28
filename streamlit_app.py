@@ -4,7 +4,7 @@ from gradio_client import Client, handle_file
 # Initiera Gradio-klienten med ditt önskade endpoint
 client = Client("Kwai-Kolors/Kolors-Virtual-Try-On")
 
-# Övergripande stil för appen, inklusive bakgrundsfärg, typografi, och logotyp
+# Övergripande stil för appen, inklusive bakgrundsfärg, typografi och layout
 st.markdown("""
     <style>
     .main {
@@ -54,28 +54,18 @@ st.markdown("""
         color: #333333;
         margin-bottom: 1rem;
     }
-    .logo {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .logo img {
-        max-width: 200px;
-    }
-    .image-preview {
+    .image-preview-container {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 200px;
-        width: 200px;
-        overflow: hidden;
-        border: 1px solid #ddd;
-        border-radius: 10px;
         margin-bottom: 1rem;
     }
-    .image-preview img {
-        max-width: 100%;
-        max-height: 100%;
+    .image-preview {
+        height: 200px;
+        width: 200px;
         object-fit: cover;
+        border: 1px solid #ddd;
+        border-radius: 10px;
     }
     @media (max-width: 768px) {
         .stApp {
@@ -98,7 +88,8 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Lägg till logotyp högst upp
-st.markdown('<div class="logo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Gina_Tricot_logo.svg/2560px-Gina_Tricot_logo.svg.png" alt="Gina Tricot Logo"></div>', unsafe_allow_html=True)
+st.markdown('<div class="logo"></div>', unsafe_allow_html=True)
+st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Gina_Tricot_logo.svg/2560px-Gina_Tricot_logo.svg.png", width=200)
 
 # Layout likt en modern e-handelswebbplats
 st.markdown('<div class="header-text">Virtuell Try-on!</div>', unsafe_allow_html=True)
@@ -115,14 +106,18 @@ with col1:
     person_img = st.file_uploader("Ladda upp Personbild", type=["png", "jpg", "jpeg"], key="person")
 
     if person_img is not None:
-        st.markdown('<div class="image-preview"><img src="data:image/png;base64,{}"></div>'.format(person_img.getbuffer().hex()), unsafe_allow_html=True)
+        st.markdown('<div class="image-preview-container">', unsafe_allow_html=True)
+        st.image(person_img, width=200)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 with col2:
     st.markdown('<div class="icon-header">👗 Plaggbild</div>', unsafe_allow_html=True)
     garment_img = st.file_uploader("Ladda upp Plaggbild", type=["png", "jpg", "jpeg"], key="garment")
 
     if garment_img is not None:
-        st.markdown('<div class="image-preview"><img src="data:image/png;base64,{}"></div>'.format(garment_img.getbuffer().hex()), unsafe_allow_html=True)
+        st.markdown('<div class="image-preview-container">', unsafe_allow_html=True)
+        st.image(garment_img, width=200)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # Avgränsare före knappen
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
