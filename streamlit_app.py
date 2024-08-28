@@ -24,16 +24,25 @@ st.markdown("""
         font-size: 2rem;
         font-weight: bold;
         color: #333333;
+        text-align: center;
     }
     .subheader-text {
         font-size: 1.2rem;
         color: #666666;
+        text-align: center;
         margin-bottom: 1.5rem;
     }
     .divider {
         margin: 2rem 0;
         height: 1px;
         background-color: #ddd;
+    }
+    .icon-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.5rem;
+        font-weight: bold;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -49,14 +58,14 @@ st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("Personbild")
+    st.markdown('<div class="icon-header">👤 Personbild</div>', unsafe_allow_html=True)
     person_img = st.file_uploader("Ladda upp Personbild", type=["png", "jpg", "jpeg"], key="person")
 
     if person_img is not None:
         st.image(person_img, caption="Förhandsvisning av Personbild", use_column_width=True)
 
 with col2:
-    st.subheader("Plaggbild")
+    st.markdown('<div class="icon-header">👗 Plaggbild</div>', unsafe_allow_html=True)
     garment_img = st.file_uploader("Ladda upp Plaggbild", type=["png", "jpg", "jpeg"], key="garment")
 
     if garment_img is not None:
@@ -68,21 +77,22 @@ st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 # Utföra Virtuell Try-on
 if st.button("Utför Virtuell Try-on"):
     if person_img is not None and garment_img is not None:
-        # Spara uppladdade filer till tillfälliga filer
-        with open("person_img.png", "wb") as f:
-            f.write(person_img.getbuffer())
+        with st.spinner('Bearbetar...'):
+            # Spara uppladdade filer till tillfälliga filer
+            with open("person_img.png", "wb") as f:
+                f.write(person_img.getbuffer())
 
-        with open("garment_img.png", "wb") as f:
-            f.write(garment_img.getbuffer())
+            with open("garment_img.png", "wb") as f:
+                f.write(garment_img.getbuffer())
 
-        # Skicka förfrågan till Hugging Face API via Gradio-klienten
-        result = client.predict(
-            person_img=handle_file("person_img.png"),
-            garment_img=handle_file("garment_img.png"),
-            seed=0,  # Seed är inte viktigt här eftersom vi randomiserar
-            randomize_seed=True,  # Alltid randomisera seed
-            api_name="/tryon"
-        )
+            # Skicka förfrågan till Hugging Face API via Gradio-klienten
+            result = client.predict(
+                person_img=handle_file("person_img.png"),
+                garment_img=handle_file("garment_img.png"),
+                seed=0,  # Seed är inte viktigt här eftersom vi randomiserar
+                randomize_seed=True,  # Alltid randomisera seed
+                api_name="/tryon"
+            )
         
         # Visa resultatet i Streamlit-appen
         st.image(result[0], caption="Resultatbild")
